@@ -8,6 +8,16 @@ POST=""
 USERS=""
 INST=$PWD
 
+# Make sure only root can run us.
+if [ ! "${UID}" = 0 ]
+then
+	echo >&2
+	echo >&2
+	echo >&2 "Only user root can run WPM."
+	echo >&2
+	exit 1
+fi
+
 if [ $# -ne 2 ]
 then
 	echo "Usage: ./install.sh <APPID> <SECRET>"
