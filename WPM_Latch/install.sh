@@ -59,8 +59,10 @@ which_cmd() {
 # Commands that are mandatory for WPM operation:
 which_cmd CP_CMD cp
 which_cmd SED_CMD sed
+which_cmd GIT_CMD git
 which_cmd LN_CMD ln
 which_cmd MYSQL_CMD mysql
+which_cmd RUBY_CMD ruby
 
 APPID=$1
 SECRET=$2
@@ -81,7 +83,7 @@ echo -e "\e[96m WordPress in Paranoid Mode with Latch."
 echo -e " Chema Alonso & Pablo González @elevenpaths"
 echo -e "\e[39m"
 echo >&2
-echo "Go to Install? ENTER..."
+echo >&2 "Go to Install? [ ENTER ]" 
 read enter
 
 "${CP_CMD}" $INST/token_template.rb $INST/token.rb
@@ -92,14 +94,14 @@ read enter
 "${SED_CMD}" -i "s|%APPID%|$1|g" $INST/operations.rb
 "${SED_CMD}" -i "s|%SECRET%|$2|g" $INST/operations.rb
 
-echo
-echo "Step 1: Pairing with Latch"
-echo "=========================="
-echo
+echo >&2
+echo >&2 "Step 1: Pairing with Latch"
+echo >&2 "=========================="
+echo >&2
 echo -n "Give me token:"
 read token
-echo
-echo "Pairing..."
+echo >&2
+echo >&2 "Pairing..."
 temp=$(ruby token.rb $token)
 if [ $? -eq 0 ]
 then
@@ -114,11 +116,11 @@ else
 	exit 1
 fi
 
-echo
-echo "Step 2: Creating Ruby files for Latch operations"
-echo "================================================"
-echo
-echo "Copying comment_template.rb to comment.rb"
+echo >&2
+echo >&2 "Step 2: Creating Ruby files for Latch operations"
+echo >&2 "================================================"
+echo >&2
+echo >&2 "Copying comment_template.rb to comment.rb"
 "${CP_CMD}" comment_template.rb comment.rb
 "${SED_CMD}" -i "s/%APPID%/$APPID/g" comment.rb
 "${SED_CMD}" -i "s/%SECRET%/$SECRET/g" comment.rb
@@ -138,11 +140,11 @@ echo >&2 "Copying users_template.rb to users.rb"
 "${SED_CMD}" -i "s|%LATCH%|$INST|g" users.rb
 
 echo >&2 
-echo "Step 3: Create Operations"
-echo "========================="
-echo
-echo "Creating ReadOnly Operation..."
-echo
+echo >&2 "Step 3: Create Operations"
+echo >&2 "========================="
+echo >&2
+echo >&2 "Creating ReadOnly Operation..."
+echo >&2
 com=$(ruby operations.rb ReadOnly)
 
 if [ $? -eq 0 ]
@@ -198,7 +200,7 @@ echo >&2 "Step 4: Setup lib mysql udf so"
 echo >&2 "=============================="
 echo >&2
 sudo apt-get install libmysqlclient-dev
-git clone https://github.com/mysqludf/lib_mysqludf_sys.git
+"${GIT_CMD}" clone https://github.com/mysqludf/lib_mysqludf_sys.git
 cd lib_mysqludf_sys/
 sudo gcc -fPIC -Wall -I/usr/include/mysql -I. -shared lib_mysqludf_sys.c -o /usr/lib/mysql/plugin/lib_mysqludf_sys.so
 mysql -u root -p < lib_mysqludf_sys.sql
@@ -210,7 +212,7 @@ echo >&2
 cd /etc/apparmor.d/
 sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
 sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
-echo "Reboot MySQL, if this fail, you need reboot MySQL"
+echo >&2 "Reboot MySQL, if this fail, you need reboot MySQL"
 sudo /etc/init.d/mysql restart
 if [ $? -ne 0 ]
 then
@@ -227,7 +229,7 @@ echo >&2
 "${CP_CMD}" $INST/proof_template.sql $INST/proof.sql
 "${SED_CMD}" -i "s|%PATH%|$INST|g" $INST/proof.sql
 
-mysql -u root -p wordpress < $INST/proof.sql
+"${MYSQL_CMD}" -u root -p wordpress < $INST/proof.sql
 
 if [ $? -eq 0 ]
 then
