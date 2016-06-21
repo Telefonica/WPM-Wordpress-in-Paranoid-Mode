@@ -20,13 +20,52 @@ fi
 
 if [ $# -ne 2 ]
 then
+	echo >&2
+	echo >&2
 	echo "Usage: ./install.sh <APPID> <SECRET>"
-	exit
+	echo >&2
+	exit 1
 fi
+
+which_cmd() {
+	local block=1
+	if [ "a${1}" = "a-n" ]
+	then
+		local block=0
+		shift
+	fi
+
+	unalias $2 >/dev/null 2>&1
+	local cmd=`which $2 2>/dev/null | head -n 1`
+	if [ $? -gt 0 -o ! -x "${cmd}" ]
+	then
+		if [ ${block} -eq 1 ]
+		then
+			echo >&2
+			echo >&2 "ERROR:	Command '$2' not found in the system path."
+			echo >&2 "	WPM requires this command for its operation."
+			echo >&2 "	Please install the required package and retry."
+			echo >&2
+			echo >&2 "	which $2"
+			exit 1
+		fi
+		return 1
+	fi
+	
+	eval $1=${cmd}
+	return 0
+}
+
+# Commands that are mandatory for WPM operation:
+which_cmd CP_CMD cp
+which_cmd SED_CMD sed
+which_cmd LN_CMD ln
+which_cmd MYSQL_CMD mysql
 
 APPID=$1
 SECRET=$2
 
+echo >&2
 echo -e "\e[34m"
 echo -e " ▄█     █▄     ▄███████▄   ▄▄▄▄███▄▄▄▄   "
 echo -e "███     ███   ███    ███ ▄██▀▀▀███▀▀▀██▄ "
@@ -42,7 +81,6 @@ echo
 echo -e "\e[96mWordpress in Paranoid Mode with Latch"
 echo -e "Chema Alonso & Pablo González @elevenpaths"
 echo -e "\e[39m"
-
 
 echo
 echo
@@ -69,10 +107,14 @@ temp=$(ruby token.rb $token)
 if [ $? -eq 0 ]
 then
 	ACCOUNTID=$temp
+	echo >&2
 	echo "Account ID: $ACCOUNTID"
+	echo >&2
 else
+	echo >&2
 	echo "Error: Account ID Invalid"
-	exit
+	echo >&2
+	exit 1
 fi
 
 echo
@@ -184,6 +226,6 @@ then
 	echo "Success! Triggers on MySQL"
 else
 	echo "Error: MySQL Triggers"
-	exit
+	exit 1
 fi
 

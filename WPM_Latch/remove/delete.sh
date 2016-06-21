@@ -19,10 +19,18 @@ sudo rm /etc/apparmor.d/usr.sbin.mysqld
 sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
 
 mysql -u root -p wordpress < $INST/dropTrigger.sql
+
 if [ $? -eq 0 ]
 then
-        echo "Success! Triggers removed!"
+	echo >&2
+	echo >&2
+	echo "Success! Triggers removed!"
+	echo >&2
+	exit 0
 else
-        echo "Error!"
-        exit
+	echo >&2
+	echo >&2
+	echo "Error!"
+	echo >&2
+	exit 1
 fi
