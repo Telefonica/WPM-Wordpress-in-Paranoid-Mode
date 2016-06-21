@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Make sure only root can run us.
+if [ ! "${UID}" = 0 ]
+then
+	echo >&2
+	echo >&2
+	echo >&2 "Only user root can run Uninstall WPM."
+	echo >&2
+	exit 1
+fi
+
 INST=$PWD
 
 echo "delete lib mysqludf_sys.so"
