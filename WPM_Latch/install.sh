@@ -228,11 +228,21 @@ echo >&2
 echo >&2 "Step 4: Setup lib mysql udf so"
 echo >&2 "=============================="
 echo >&2
-apt-get install libmysqlclient-dev
+
+# Install libmysqlclient-dev
+if [ "${OS}" = "Debian" ];
+then
+	apt-get install libmysqlclient-dev
+else
+	yum install libmysqlclient-dev
+fi
+
 "${GIT_CMD}" clone https://github.com/mysqludf/lib_mysqludf_sys.git
 cd "${INST}"/lib_mysqludf_sys/
 "${GCC_CMD}" -fPIC -Wall -I/usr/include/mysql -I. -shared lib_mysqludf_sys.c -o /usr/lib/mysql/plugin/lib_mysqludf_sys.so
-"${MYSQL_CMD}" -u root -p < lib_mysqludf_sys.sql
+
+echo >&2 "MySQL: Ingress password"
+"${MYSQL_CMD}" -h localhost -u root -p < lib_mysqludf_sys.sql
 
 echo >&2
 echo >&2 "Step 5: AppArmor Configuration"
@@ -255,10 +265,13 @@ echo >&2
 echo >&2 "Step 6: Creating Triggers on MySQL"
 echo >&2 "=================================="
 echo >&2
+echo >&2 "Database:"
+read DATABASE
 "${CP_CMD}" "${INST}"/proof_template.sql "${INST}"/proof.sql
 "${SED_CMD}" -i "s|%PATH%|$INST|g" "${INST}"/proof.sql
+"${SED_CMD}" -i "s|%DATABASE%|$DATABASE|g" "${INST}"/proof.sql
 
-"${MYSQL_CMD}" -u root -p wordpress < "${INST}"/proof.sql
+"${MYSQL_CMD}" -u root -p "${DATABASE}" < "${INST}"/proof.sql
 
 if [ $? -eq 0 ]
 then
