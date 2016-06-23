@@ -1,28 +1,42 @@
-Wordpress in Paranoid Mode (WPM) is a tool for Hardening Wordpress.
+WordPress in Paranoid Mode (WPM)
+================================
 
-Requisites:
+Is a tool for Hardening WordPress.
 
-1. Create an App in https://latch.elevenpaths.com
-2. Get an APP ID and SECRET
+Requisites
+----------
 
-Install:
+1. Create an App in [latch.eleventpaths.com](https://latch.elevenpaths.com)
+2. Get an **APP ID** and **SECRET**
 
-Execute ./install.sh <APP ID> <SECRET>
+Install
+-------
+
+Installing WPM requires you to execute one console command:
+
+```bash
+./install.sh <APP ID> <SECRET>
+```
 
 This steps are automatic through of this script:
 
-Step 1: Give me a token (Latch)
-Step 2: Pairing
-Step 3: Copying files and create operations
-Step 4: Install bundles (Libraries MySQL)
-Step 5: Configure AppArmor
-Step 6: Dump Triggers on MySQL
+ * Step 1: Give me a token (Latch)
+ * Step 2: Pairing
+ * Step 3: Copying files and create operations
+ * Step 4: Install bundles (Libraries MySQL)
+ * Step 5: Configure AppArmor
+ * Step 6: Dump Triggers on MySQL
 
-Uninstall:
+Uninstall
+---------
 
-In Directory "remove" execute ./uninstall.sh
+In Directory "remove/" execute:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+```bash
+./delete.sh
+```
+
+**< NOTE >** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
 	KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 	WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
 	PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
@@ -33,4 +47,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
 
 This software doesn't have a QA Process. This software is a Proof of Concept.
 
-For more information please visit http://www.elevenpaths.com
+For more information please visit [www.elevenpaths.com](http://www.elevenpaths.com)
