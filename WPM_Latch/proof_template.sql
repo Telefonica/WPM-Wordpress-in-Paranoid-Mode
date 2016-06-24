@@ -3,16 +3,14 @@ DELIMITER ;;
 BEFORE INSERT ON %DATABASE%.wp_comments
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
 
-	 SET result = sys_exec('ruby %PATH%/comment.rb ');
+	 SET result = sys_exec('ruby %PATH%/comment.rb');
      
 	 IF  result NOT IN (0) THEN
 		SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
         SET MESSAGE_TEXT = 'Latch Cerrado';
      END IF;
-
 
 END */;;
 DELIMITER ;
@@ -21,16 +19,14 @@ DELIMITER ;;
 BEFORE UPDATE ON %DATABASE%.wp_comments
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
 
-	 SET result = sys_exec('ruby %PATH%/comment.rb ');
+	 SET result = sys_exec('ruby %PATH%/comment.rb');
      
 	 IF  result NOT IN (0) THEN
 		SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
         SET MESSAGE_TEXT = 'Latch Cerrado';
      END IF;
-
 
 END */;;
 DELIMITER ;
@@ -39,16 +35,14 @@ DELIMITER ;;
 BEFORE DELETE ON %DATABASE%.wp_comments
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
 
-	 SET result = sys_exec('ruby %PATH%/comment.rb ');
+	 SET result = sys_exec('ruby %PATH%/comment.rb');
      
 	 IF  result NOT IN (0) THEN
 		SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
         SET MESSAGE_TEXT = 'Latch Cerrado';
      END IF;
-
 
 END */;;
 DELIMITER ;
@@ -57,7 +51,6 @@ DELIMITER ;;
 BEFORE INSERT ON %DATABASE%.wp_posts
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
 	 DECLARE readonly int;
 
@@ -68,13 +61,12 @@ BEGIN
 		SET MESSAGE_TEXT = 'Latch Cerrado';
 	 END IF;
 
-	 SET result = sys_exec('ruby %PATH%/post.rb ');
+	 SET result = sys_exec('ruby %PATH%/post.rb');
      
 	 IF  result NOT IN (0) THEN
 		SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
         SET MESSAGE_TEXT = 'Latch Cerrado';
      END IF;
-
 
 END */;;
 DELIMITER ;
@@ -83,24 +75,22 @@ DELIMITER ;;
 BEFORE UPDATE ON %DATABASE%.wp_posts
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
-         DECLARE readonly int;
+     DECLARE readonly int;
 
-         SET readonly = sys_exec('ruby %PATH%/comment.rb');
+     SET readonly = sys_exec('ruby %PATH%/comment.rb');
 
-         IF readonly NOT IN (0) THEN
-                SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'Latch Cerrado';
-         END IF;
+     IF readonly NOT IN (0) THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Latch Cerrado';
+     END IF;
 
-	 SET result = sys_exec('ruby %PATH%/post.rb ');
+	 SET result = sys_exec('ruby %PATH%/post.rb');
      
 	 IF  result NOT IN (0) THEN
 		SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
         SET MESSAGE_TEXT = 'Latch Cerrado';
      END IF;
-
 
 END */;;
 DELIMITER ;
@@ -109,17 +99,15 @@ DELIMITER ;;
 BEFORE DELETE ON %DATABASE%.wp_posts
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
+     DECLARE readonly int;
 
-         DECLARE readonly int;
+     SET readonly = sys_exec('ruby %PATH%/comment.rb');
 
-         SET readonly = sys_exec('ruby %PATH%/comment.rb');
-
-         IF readonly NOT IN (0) THEN
-                SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'Latch Cerrado';
-         END IF;
+     IF readonly NOT IN (0) THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Latch Cerrado';
+     END IF;
 
 	 SET result = sys_exec('ruby %PATH%/post.rb ');
      
@@ -128,7 +116,6 @@ BEGIN
         SET MESSAGE_TEXT = 'Latch Cerrado';
      END IF;
 
-
 END */;;
 DELIMITER ;
 DELIMITER ;;
@@ -136,7 +123,6 @@ DELIMITER ;;
 BEFORE INSERT ON %DATABASE%.wp_usermeta
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
 	 DECLARE readonly int;
 
@@ -144,18 +130,16 @@ BEGIN
      
 	 IF readonly NOT IN (0) THEN
 		SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
-        	SET MESSAGE_TEXT = 'Latch Cerrado'; 
+       	SET MESSAGE_TEXT = 'Latch Cerrado'; 
 	END IF;
-
 
 	IF NEW.meta_key <> 'session_tokens' THEN	
 	        SET result = sys_exec('ruby %PATH%/users.rb ');
 		IF result NOT IN (0) THEN
 			SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
-        		SET MESSAGE_TEXT = 'Latch Cerrado';
+      		SET MESSAGE_TEXT = 'Latch Cerrado';
 		END IF;		
-        END IF;
-
+    END IF;
 
 END */;;
 DELIMITER ;
@@ -164,24 +148,23 @@ DELIMITER ;;
 BEFORE UPDATE ON %DATABASE%.wp_usermeta
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
-	 DECLARE readonly int;
-	 DECLARE result int;
+	DECLARE readonly int;
+	DECLARE result int;
 
-	 SET readonly = sys_exec('ruby %PATH%/comment.rb');
+	SET readonly = sys_exec('ruby %PATH%/comment.rb');
      
-	 IF readonly NOT IN (0) THEN
+	IF readonly NOT IN (0) THEN
 		SIGNAL SQLSTATE '45000'
 		SET MESSAGE_TEXT = 'Latch Cerrado';
 	END IF;
 
-        IF NEW.meta_key <> 'session_tokens' THEN
+    IF NEW.meta_key <> 'session_tokens' THEN
 		SET result = sys_exec('ruby %PATH%/users.rb ');
-                IF result NOT IN (0) THEN
-                        SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
-                        SET MESSAGE_TEXT = 'Latch Cerrado';
-                END IF;
+        IF result NOT IN (0) THEN
+                SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
+                SET MESSAGE_TEXT = 'Latch Cerrado';
         END IF;
+    END IF;
 
 END */;;
 DELIMITER ;
@@ -190,7 +173,6 @@ DELIMITER ;;
 BEFORE DELETE ON %DATABASE%.wp_usermeta
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
          DECLARE result int;
          DECLARE readonly int;
 
@@ -199,15 +181,14 @@ BEGIN
          IF readonly NOT IN (0) THEN
                 SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
                 SET MESSAGE_TEXT = 'Latch Cerrado';
-        END IF;
+         END IF;
 
          SET result = sys_exec('ruby %PATH%/users.rb ');
 
-        IF result NOT IN (0) THEN
+         IF result NOT IN (0) THEN
                 SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
                 SET MESSAGE_TEXT = 'Latch Cerrado';
-     END IF;
-
+         END IF;
 
 END */;;
 DELIMITER ;
@@ -216,7 +197,6 @@ DELIMITER ;;
 BEFORE INSERT ON %DATABASE%.wp_users
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
 	 DECLARE readonly int;
 
@@ -233,7 +213,6 @@ BEGIN
         SET MESSAGE_TEXT = 'Latch Cerrado';
      END IF;
 
-
 END */;;
 DELIMITER ;
 DELIMITER ;;
@@ -241,23 +220,21 @@ DELIMITER ;;
 BEFORE UPDATE ON %DATABASE%.wp_users
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
 	 DECLARE readonly int;
 
-	 SET result = sys_exec('ruby %PATH%/users.rb ');
-	 SET readonly = sys_exec('ruby %PATH%/comment.rb ');     
+	 SET result = sys_exec('ruby %PATH%/users.rb');
+	 SET readonly = sys_exec('ruby %PATH%/comment.rb');     
 
 	 IF readonly NOT IN (0) THEN
-                SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'Latch Cerrado';
-         END IF;	 
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Latch Cerrado';
+     END IF;	 
 
 	 IF  result NOT IN (0) THEN
 		SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
         SET MESSAGE_TEXT = 'Latch Cerrado';
      END IF;
-
 
 END */;;
 DELIMITER ;
@@ -266,11 +243,10 @@ DELIMITER ;;
 BEFORE DELETE ON %DATABASE%.wp_users
 FOR EACH ROW
 BEGIN
-	 #DECLARE cmd CHAR(255);
 	 DECLARE result int;
 	 DECLARE readonly int;
 
-         SET readonly = sys_exec('ruby %PATH%/comment.rb ');
+         SET readonly = sys_exec('ruby %PATH%/comment.rb');
 
          IF readonly NOT IN (0) THEN
                 SIGNAL SQLSTATE '45000'
@@ -283,7 +259,6 @@ BEGIN
 		SIGNAL SQLSTATE '45000' -- "unhandled user-defined exception"
         SET MESSAGE_TEXT = 'Latch Cerrado';
      END IF;
-
 
 END */;;
 DELIMITER ;

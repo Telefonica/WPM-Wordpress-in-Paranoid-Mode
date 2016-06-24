@@ -1,5 +1,4 @@
 require_relative 'latch_sdk/Latch'
-#require 'json'
 
 if ARGV.size != 1
 	puts "Only 1 parameter: token.rb <token>"
