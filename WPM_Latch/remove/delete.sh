@@ -20,6 +20,7 @@ else
 	DIST="Unknown"
 	DIST_VER="Unknown"
 fi
+
 if [ -f /etc/debian_version ]; 
 then
 	OS="Debian"
@@ -107,3 +108,45 @@ else
 	echo >&2
 	exit 1
 fi
+
+echo >&2
+echo >&2
+echo >&2 "Delete all scrips..."
+echo >&2
+
+# Delete comment.rb
+if [ -f "${INST}"/../comment.rb ];
+then
+	"${RM_CMD}" "${INST}"/../comment.rb
+fi
+
+# Delete operations.rb
+if [ -f "${INST}"/../operations.rb ];
+then
+	"${RM_CMD}" "${INST}"/../operations.rb
+fi
+
+# Delete token.rb
+if [ -f "${INST}"/../token.rb ];
+then
+	"${RM_CMD}" "${INST}"/../token.rb
+fi
+
+# Delete post.rb
+if [ -f "${INST}"/../post.rb ];
+then
+	"${RM_CMD}" "${INST}"/../post.rb
+fi
+
+# Delete users.rb
+if [ -f "${INST}"/../users.rb ];
+then
+	"${RM_CMD}" "${INST}"/../users.rb
+fi
+
+# Delete proof.sql
+if [ -f "${INST}"/../proof.sql ];
+then
+	"${RM_CMD}" "${INST}"/../proof.sql
+fi
+
